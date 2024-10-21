@@ -1,10 +1,12 @@
 <template>
-    <div style="width: 100%; display: flex; justify-content: center;">
-        <div style="max-width: 800px; border: 2px solid #000000; border-top-left-radius: 4px; border-top-right-radius: 4px;">
-        <h4 style="width: 100%; background-color: #E6E6E6; border-bottom: 2px solid #000000; margin: 0px; margin-bottom: 5px; padding: 4px 0px 4px 0px; border-top-left-radius: 4px; border-top-right-radius: 4px;">
-            {{title}}
-        </h4>
-        <slot></slot>
+    <div style="width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center;">
+        <div style="height: 90%; width: 90%;">
+            <h4 style="width: 100%; height: 5%; display: flex; align-items: center; justify-content: center; background-color: #E6E6E6; border: 2px solid #000000; margin: 0px; border-top-left-radius: 4px; border-top-right-radius: 4px;">
+                {{title}}
+            </h4>
+            <div style="width: 100%; height: 90%; border: 2px solid #000000; border-top: none;">
+                <slot></slot>
+            </div>
         </div>
     </div>
 </template>
