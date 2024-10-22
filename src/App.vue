@@ -1,8 +1,4 @@
 <template>
-  <nav>
-    <router-link to="/"></router-link>
-    <router-link to="/studentRegistration"></router-link>
-  </nav>
   <router-view />
 </template>
 

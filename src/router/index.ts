@@ -9,7 +9,13 @@ const routes = [
   {
     path: '/studentRegistration',
     name: 'studentRegistration',
-    component: () => import('@/views/StudentRegistration.vue'),  // Novo nome do arquivo
+    component: () => import('@/views/StudentRegistration.vue'),
+  },
+  {
+    path: '/editStudentRegistration/:id',
+    name: 'editStudentRegistration',
+    component: () => import('@/views/StudentRegistration.vue'),
+    props: true
   },
 ];
 

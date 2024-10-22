@@ -48,7 +48,7 @@
             <li>{{ student.name }}</li>
             <li>{{ student.cpf }}</li>
             <li>
-              <button  style="margin-right: 10px;">Editar</button>
+              <button @click="goToEditStudent(student.id)" style="margin-right: 10px;">Editar</button>
               <button @click="openModalDeleteStudent(student.id, student.name)">Excluir</button>
             </li>
           </ul>
@@ -100,6 +100,10 @@ export default defineComponent({
 
     const students = ref<StudentModel[]>([]);
 
+    const goToEditStudent = (id: string) => {
+      router.push({ name: "editStudentRegistration", params: { id } });
+    };
+
     const goToStudentRegistration = () => {
       router.push({ name: "studentRegistration" });
     };
@@ -127,6 +131,7 @@ export default defineComponent({
       selectedStudentName,
       selectedStudentId,
       isModalOpenDeleteStudent,
+      goToEditStudent,
       openModalDeleteStudent,
       closeModalDeleteStudent,
       goToStudentRegistration,

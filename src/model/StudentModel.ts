@@ -8,3 +8,5 @@ export interface CreateStudentModel {
 export interface StudentModel extends CreateStudentModel {
     id: string;
 }
+
+export type UpdateStudentModel = Omit<StudentModel, 'academicRegistration'>
