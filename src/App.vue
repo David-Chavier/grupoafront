@@ -15,8 +15,6 @@
   color: #2c3e50;
 }
 
-
-
 body {
   margin: 0px;
 }

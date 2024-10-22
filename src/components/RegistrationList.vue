@@ -48,15 +48,21 @@
             <li>{{ student.name }}</li>
             <li>{{ student.cpf }}</li>
             <li>
-              <button @click="openModalEditStudent" style="margin-right: 10px;">Editar</button>
-              <button @click="handleDeleteStudent(student.id!)">Excluir</button>
+              <button  style="margin-right: 10px;">Editar</button>
+              <button @click="openModalDeleteStudent(student.id, student.name)">Excluir</button>
             </li>
           </ul>
         </div>
       </div>
     </div>
   </BoxComponent>
-  <DeleteConfirmModal :isOpenModal="isModalOpenEditStudent" :closeModal="closeModalEditStudent"/>
+  <DeleteConfirmModal
+    :isOpenModal="isModalOpenDeleteStudent" 
+    :closeModal="closeModalDeleteStudent" 
+    :studentId="selectedStudentId!" 
+    :studentName="selectedStudentName!" 
+    :confirmDeleteStudent="handleDeleteStudent"
+  />
 </template>
 
 <script lang="ts">
@@ -66,6 +72,7 @@ import DeleteConfirmModal from "@/components/DeleteConfirmModal.vue";
 import { deleteStudent, getStudents } from "@/services/StudentServices";
 import { StudentModel } from "@/model/StudentModel";
 import router from "@/router";
+import './styles.css';
 
 export default defineComponent({
   components: {
@@ -75,23 +82,30 @@ export default defineComponent({
   name: "RegistrationList",
   setup() {
 
-    const isModalOpenEditStudent = ref(false);
+    const isModalOpenDeleteStudent = ref(false);
+    const selectedStudentId = ref<string | null>(null);
+    const selectedStudentName = ref<string | null>(null);
 
-    const openModalEditStudent = () => {
-      isModalOpenEditStudent.value = true;
+    const openModalDeleteStudent = (id: string, name: string) => {
+      selectedStudentId.value = id;
+      selectedStudentName.value = name;
+      isModalOpenDeleteStudent.value = true;
     };
 
-    const closeModalEditStudent = () => {
-      isModalOpenEditStudent.value = false;
+    const closeModalDeleteStudent = () => {
+      isModalOpenDeleteStudent.value = false;
+      selectedStudentId.value = null;
+      selectedStudentName.value = null;
     };
-    // Defina a lista de alunos como uma referência reativa de array do tipo StudentModel
+
     const students = ref<StudentModel[]>([]);
 
     const goToStudentRegistration = () => {
-      router.push({ name: "studentRegistration" }); // Supondo que o nome da rota de cadastro seja "cadastro"
+      router.push({ name: "studentRegistration" });
     };
 
     const handleDeleteStudent = async (id: string) =>{
+      isModalOpenDeleteStudent.value = false;
       await deleteStudent(id).then(()=>{
         getAllStudents()
       });
@@ -99,21 +113,22 @@ export default defineComponent({
 
     const getAllStudents = async () =>{
       await getStudents().then((response)=>{
-        students.value = response; // Atualiza a referência reativa
+        students.value = response;
       }).catch((error)=>{
         console.error("Erro ao buscar alunos:", error);
       })
     }
 
-    // Requisição GET à API quando o componente é montado
     onMounted(() => {
       getAllStudents()
     });
 
     return {
-      isModalOpenEditStudent,
-      openModalEditStudent,
-      closeModalEditStudent,
+      selectedStudentName,
+      selectedStudentId,
+      isModalOpenDeleteStudent,
+      openModalDeleteStudent,
+      closeModalDeleteStudent,
       goToStudentRegistration,
       handleDeleteStudent,
       students,
@@ -142,7 +157,7 @@ input:hover {
 }
 
 input:focus {
-  border: 1px solid #CCCCCC; /* A mesma borda no foco (clicado) */
-  outline: none; /* Remove o contorno padrão que aparece ao focar */
+  border: 1px solid #CCCCCC;
+  outline: none;
 }
 </style>
