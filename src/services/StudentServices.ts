@@ -1,4 +1,4 @@
-import { CreateStudentModel, StudentModel, UpdateStudentModel } from "@/model/StudentModel";
+import { StudentModel } from "@/model/StudentModel";
 import { Api } from "./Api";
 
 export async function getStudents() {
@@ -7,19 +7,19 @@ export async function getStudents() {
     return request.data;
 }
 
-export async function getStudentById(id: string) {
-    const request = await Api.get<StudentModel>(`/Student/${id}`);
+export async function getStudentById(academicRegistration: string) {
+    const request = await Api.get<StudentModel>(`/Student/${academicRegistration}`);
 
     return request.data;
 }
 
-export async function createStudent(student: CreateStudentModel) {
+export async function createStudent(student: StudentModel) {
     const request = await Api.post("/Student", student);
 
     return request.data;
 }
 
-export async function updateStudent(student: UpdateStudentModel) {
+export async function updateStudent(student: StudentModel) {
     const response = await Api.put("/Student", student);
 
     return response.data;

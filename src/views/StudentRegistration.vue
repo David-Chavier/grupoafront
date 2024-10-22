@@ -26,68 +26,98 @@
         <div style="background-color: #EEEEEE; width: 20%; padding: 5px; margin-left: 20px; border: 1px solid #D6D6D6; border-top-left-radius: 4px; border-bottom-left-radius: 4px;">
           CPF
         </div>
-        <input style="width: 60%;" type="text" id="cpf" name="cpf" placeholder="Informe o número do documento" v-model="student.cpf" />
+        <input :disabled="isEditMode" style="width: 60%;" type="text" id="cpf" name="cpf" placeholder="Informe o número do documento" v-model="student.cpf" />
       </div>
 
       <div style="width: 90%; display: flex; justify-content: end; padding: 20px;">
-        <button style="height: 40px; margin: 5px;" @click="goToRegistrationList">Cancelar</button>
-        <button style="height: 40px; margin: 5px;" @click="saveStudent">{{ isEditMode ? 'Atualizar' : 'Salvar' }}</button>
+        <button style="height: 40px; margin: 5px; cursor: pointer;" @click="goToRegistrationList">Cancelar</button>
+        <button 
+        :disabled="student.name === '' || student.academicRegistration === '' ||student.cpf === '' || student.email === ''" 
+         style="height: 40px; margin: 5px; cursor: pointer;" @click="saveStudent">Salvar</button>
       </div>
     </div>
   </BoxComponent>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, onMounted } from "vue";
+import { defineComponent, reactive, ref, onMounted, inject } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import BoxComponent from "@/components/BoxComponent.vue";
-import { StudentModel, UpdateStudentModel } from "@/model/StudentModel";
+import { StudentModel } from "@/model/StudentModel";
 import { createStudent, getStudentById, updateStudent } from "@/services/StudentServices";
 
 export default defineComponent({
   components: {
     BoxComponent,
   },
-  name: "StudentForm",
+  name: "StudentRegistration",
   setup() {
+
+    const showSuccess = inject<((message: string) => void)>('showSuccess');
+    const showError = inject<((message: string) => void)>('showError');
+
+    const triggerSuccess = (message: string) => {
+      if (showSuccess) {
+        showSuccess(message);
+      }
+    };
+
+    const triggerError = (message: string) => {
+      if (showError) {
+        showError(message);
+      }
+    };
+
     const router = useRouter();
     const route = useRoute();
     
     const isEditMode = ref(false);
-    const studentId = ref<string | null>(null);
 
     const student: StudentModel = reactive<StudentModel>({
       name: "",
       email: "",
       academicRegistration: "",
-      cpf: "",
-      id: ""
+      cpf: ""
     });
 
-    const loadStudentData = async (id: string) => {
-      try {
-        const data = await getStudentById(id);
+    const loadStudentData = async (academicRegistration: string) => {
+      getStudentById(academicRegistration).then((data)=>{
         student.name = data.name;
         student.email = data.email;
         student.academicRegistration = data.academicRegistration;
         student.cpf = data.cpf;
-        student.id = data.id; // Define o ID no estado do aluno
-      } catch (error) {
-        console.error("Erro ao carregar dados do aluno:", error);
-      }
+      }).catch((error)=>{
+        if(error.response.data.message){
+          triggerError(error.response.data.message)
+        }else{
+          triggerError("Erro ao buscar cadastro do aluno")
+        }
+      })
     };
 
     const saveStudent = async () => {
-      try {
-        if (isEditMode.value) {
-          const { academicRegistration, ...studentData } = student; // Remove academicRegistration
-          await updateStudent(studentData as UpdateStudentModel);
-        } else {
-          await createStudent(student);
-        }
-        router.push({ name: "registrationList" });
-      } catch (error) {
-        console.error("Erro ao salvar o aluno:", error);
+      if (isEditMode.value) {   
+        updateStudent(student).then(()=>{
+          triggerSuccess("Cadastrado editado com sucesso")
+          router.push({ name: "registrationList" });
+        }).catch((error)=>{
+          if(error.response.data.message){
+          triggerError(error.response.data.message)
+          }else{
+            triggerError("Erro ao editar cadastro")
+          }
+        })
+      } else {
+        createStudent(student).then(()=>{
+          triggerSuccess("Cadastrado criado com sucesso")
+          router.push({ name: "registrationList" });
+        }).catch((error)=>{
+          if(error.response.data.message){
+            triggerError(error.response.data.message)
+          }else{
+            triggerError("Erro ao criar cadastro")
+          }
+        })
       }
     };
 
@@ -98,12 +128,14 @@ export default defineComponent({
     onMounted(() => {
       if (route.params.id) {
         isEditMode.value = true;
-        studentId.value = route.params.id as string;
-        loadStudentData(studentId.value);
+        student.academicRegistration = route.params.id as string;
+        loadStudentData(student.academicRegistration);
       }
     });
 
     return {
+      triggerSuccess,
+      triggerError,
       student,
       isEditMode,
       saveStudent,

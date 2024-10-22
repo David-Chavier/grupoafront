@@ -10,13 +10,12 @@
             name="name"
           />
           <button
-            @click="goToStudentRegistration"
             style="flex: 1; height: 40px; margin-right: 20px; border: 1px solid #CCCCCC; background-color: #CCCCCC; border-left: 0px;"
           >
             Pesquisar
           </button>
         </div>
-        <button @click="goToStudentRegistration" style="flex: 1; height: 40px;">
+        <button @click="goToStudentRegistration" style="flex: 1; height: 40px; cursor: pointer;">
           Cadastrar alunos
         </button>
       </div>
@@ -48,8 +47,8 @@
             <li>{{ student.name }}</li>
             <li>{{ student.cpf }}</li>
             <li>
-              <button @click="goToEditStudent(student.id)" style="margin-right: 10px;">Editar</button>
-              <button @click="openModalDeleteStudent(student.id, student.name)">Excluir</button>
+              <button @click="goToEditStudent(student.academicRegistration)" style="margin-right: 10px; cursor: pointer;">Editar</button>
+              <button @click="openModalDeleteStudent(student.academicRegistration, student.name)" style="cursor: pointer;">Excluir</button>
             </li>
           </ul>
         </div>
@@ -66,7 +65,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent, ref, onMounted, inject } from "vue";
 import BoxComponent from "@/components/BoxComponent.vue";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal.vue";
 import { deleteStudent, getStudents } from "@/services/StudentServices";
@@ -81,6 +80,20 @@ export default defineComponent({
   },
   name: "RegistrationList",
   setup() {
+    const showSuccess = inject<((message: string) => void)>('showSuccess');
+    const showError = inject<((message: string) => void)>('showError');
+    
+    const triggerSuccess = (message: string) => {
+      if (showSuccess) {
+        showSuccess(message);
+      }
+    };
+
+    const triggerError = (message: string) => {
+      if (showError) {
+        showError(message);
+      }
+    };
 
     const isModalOpenDeleteStudent = ref(false);
     const selectedStudentId = ref<string | null>(null);
@@ -108,18 +121,21 @@ export default defineComponent({
       router.push({ name: "studentRegistration" });
     };
 
-    const handleDeleteStudent = async (id: string) =>{
+    const handleDeleteStudent = (id: string) =>{
       isModalOpenDeleteStudent.value = false;
-      await deleteStudent(id).then(()=>{
+      deleteStudent(id).then(()=>{
         getAllStudents()
-      });
+        triggerSuccess("Cadastro deletado com sucesso.")
+      }).catch(() => {
+        triggerError("Erro ao deletar cadastro.")
+      })
     }
 
-    const getAllStudents = async () =>{
-      await getStudents().then((response)=>{
+    const getAllStudents = () =>{
+      getStudents().then((response)=>{
         students.value = response;
-      }).catch((error)=>{
-        console.error("Erro ao buscar alunos:", error);
+      }).catch(()=>{
+        triggerError("Erro ao buscar cadastros.")
       })
     }
 
@@ -128,6 +144,8 @@ export default defineComponent({
     });
 
     return {
+      triggerSuccess,
+      triggerError,
       selectedStudentName,
       selectedStudentId,
       isModalOpenDeleteStudent,
