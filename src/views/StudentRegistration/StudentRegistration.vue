@@ -1,39 +1,41 @@
 <template>
   <BoxComponent :title="isEditMode ? 'Editar aluno' : 'Cadastro de aluno'">
-    <div style="padding: 5%;">
-      <div style="display: flex; margin-bottom: 10px;">
-        <div style="background-color: #EEEEEE; width: 20%; padding: 5px; margin-left: 20px; border: 1px solid #D6D6D6; border-top-left-radius: 4px; border-bottom-left-radius: 4px;">
+    <div class="student-registration-container">
+      <div class="input-group">
+        <div class="input-label">
           Nome
         </div>
-        <input style="width: 60%;" type="text" id="name" name="name" placeholder="Informe o nome completo" v-model="student.name" />
+        <input class="input-field" type="text" id="name" name="name" placeholder="Informe o nome completo" v-model="student.name" />
       </div>
 
-      <div style="display: flex; margin-bottom: 10px;">
-        <div style="background-color: #EEEEEE; width: 20%; padding: 5px; margin-left: 20px; border: 1px solid #D6D6D6; border-top-left-radius: 4px; border-bottom-left-radius: 4px;">
+      <div class="input-group">
+        <div class="input-label">
           E-mail
         </div>
-        <input style="width: 60%;" type="text" id="email" name="email" placeholder="Informe apenas um e-mail" v-model="student.email" />
+        <input class="input-field" type="text" id="email" name="email" placeholder="Informe apenas um e-mail" v-model="student.email" />
       </div>
 
-      <div style="display: flex; margin-bottom: 10px;">
-        <div style="background-color: #EEEEEE; width: 20%; padding: 5px; margin-left: 20px; border: 1px solid #D6D6D6; border-top-left-radius: 4px; border-bottom-left-radius: 4px;">
+      <div class="input-group">
+        <div class="input-label">
           RA
         </div>
-        <input :disabled="isEditMode" style="width: 60%;" type="text" id="ra" name="ra" placeholder="Informe o registro acadêmico" v-model="student.academicRegistration" />
+        <input :disabled="isEditMode" class="input-field" type="text" id="ra" name="ra" placeholder="Informe o registro acadêmico" v-model="student.academicRegistration" />
       </div>
 
-      <div style="display: flex; margin-bottom: 10px;">
-        <div style="background-color: #EEEEEE; width: 20%; padding: 5px; margin-left: 20px; border: 1px solid #D6D6D6; border-top-left-radius: 4px; border-bottom-left-radius: 4px;">
+      <div class="input-group">
+        <div class="input-label">
           CPF
         </div>
-        <input :disabled="isEditMode" style="width: 60%;" type="text" id="cpf" name="cpf" placeholder="Informe o número do documento" v-model="student.cpf" />
+        <input :disabled="isEditMode" class="input-field" type="text" id="cpf" name="cpf" placeholder="Informe o número do documento" v-model="student.cpf" />
       </div>
 
-      <div style="width: 90%; display: flex; justify-content: end; padding: 20px;">
-        <button style="height: 40px; margin: 5px; cursor: pointer;" @click="goToRegistrationList">Cancelar</button>
+      <div class="button-group">
+        <button class="button" @click="goToRegistrationList">Cancelar</button>
         <button 
-        :disabled="student.name === '' || student.academicRegistration === '' ||student.cpf === '' || student.email === ''" 
-         style="height: 40px; margin: 5px; cursor: pointer;" @click="saveStudent">Salvar</button>
+          :disabled="student.name === '' || student.academicRegistration === '' || student.cpf === '' || student.email === ''" 
+          class="button" 
+          @click="saveStudent"
+        >Salvar</button>
       </div>
     </div>
   </BoxComponent>
@@ -45,6 +47,7 @@ import { useRouter, useRoute } from "vue-router";
 import BoxComponent from "@/components/BoxComponent.vue";
 import { StudentModel } from "@/model/StudentModel";
 import { createStudent, getStudentById, updateStudent } from "@/services/StudentServices";
+import './styles/studentRegistrationStyles.css';
 
 export default defineComponent({
   components: {

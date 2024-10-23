@@ -9,12 +9,12 @@ const routes = [
   {
     path: '/studentRegistration',
     name: 'studentRegistration',
-    component: () => import('@/views/StudentRegistration.vue'),
+    component: () => import('@/views/StudentRegistration/StudentRegistration.vue'),
   },
   {
     path: '/editStudentRegistration/:id',
     name: 'editStudentRegistration',
-    component: () => import('@/views/StudentRegistration.vue'),
+    component: () => import('@/views/StudentRegistration/StudentRegistration.vue'),
     props: true
   },
 ];

@@ -71,7 +71,7 @@ import DeleteConfirmModal from "@/components/DeleteConfirmModal.vue";
 import { deleteStudent, getStudents } from "@/services/StudentServices";
 import { StudentModel } from "@/model/StudentModel";
 import router from "@/router";
-import './styles.css';
+import './styles/registrationListStyles.css';
 
 export default defineComponent({
   components: {
@@ -159,28 +159,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-h3 {
-  margin: 40px 0 10px;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  margin: 5px 0;
-}
-input {
-  border: 1px solid #CCCCCC;
-}
-
-input:hover {
-  border: 1px solid #CCCCCC;
-}
-
-input:focus {
-  border: 1px solid #CCCCCC;
-  outline: none;
-}
-</style>

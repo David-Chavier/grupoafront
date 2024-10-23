@@ -7,7 +7,7 @@
       </div>
       <div class="modal-body">
         <p>
-          Ao confirmar estará deletando permanentemente o cadastro de 
+          Ao confirmar estará deletando permanentemente o cadastro de
           <strong>"{{ studentName }}"</strong>.
         </p>
       </div>
@@ -21,6 +21,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
+import "./styles/deleteConfirmModalStyles.css"
 
 export default defineComponent({
   props: {
@@ -72,49 +73,3 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 500px;
-  width: 100%;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-body {
-  margin-bottom: 40px;
-  text-align: start;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.close-button {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-}
-</style>
