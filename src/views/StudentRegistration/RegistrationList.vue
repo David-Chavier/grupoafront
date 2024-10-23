@@ -1,54 +1,41 @@
 <template>
   <BoxComponent title="Consulta de Alunos">
-    <div style="height: 20%; min-height: 60px;">
-      <div style="display: flex; padding: 10px 20px 0px 20px;">
-        <div style="width: 80%; display: flex;">
-          <input
-            style="width: 80%; height: 38px; padding: 0px; margin: 0px; border: 1px solid #CCCCCC; border-right: 0px;"
-            type="text"
-            id="name"
-            name="name"
-          />
-          <button
-            style="flex: 1; height: 40px; margin-right: 20px; border: 1px solid #CCCCCC; background-color: #CCCCCC; border-left: 0px;"
-          >
-            Pesquisar
-          </button>
-        </div>
-        <button @click="goToStudentRegistration" style="flex: 1; height: 40px; cursor: pointer;">
-          Cadastrar alunos
+    <div class="header-container">
+      <div class="search-container">
+        <input
+          class="search-input"
+          type="text"
+          id="name"
+          name="name"
+        />
+        <button class="search-button">
+          Pesquisar
         </button>
       </div>
+      <button @click="goToStudentRegistration" class="register-button">
+        Cadastrar alunos
+      </button>
     </div>
 
-    <div style="border-top: 2px solid #000000; height: calc(80% - 2px);">
-      <ul
-        style="display: grid; align-items: center; height: 50px; grid-template-columns: repeat(4, 1fr); margin: 0px; background-color: #CCCCCC;"
-      >
+    <div class="list-container">
+      <ul class="header-list">
         <li>Registro Acadêmico</li>
         <li>Nome</li>
         <li>CPF</li>
         <li>Ações</li>
       </ul>
 
-      <div style="height: calc(100% - 50px); overflow-y: auto;">
+      <div class="student-list">
         <div v-for="(student, index) in students" :key="index">
           <ul
-            :style="{
-              display: 'grid',
-              'grid-template-columns': 'repeat(4, 1fr)',
-              margin: '0px',
-              height: '50px',
-              alignItems: 'center',
-              backgroundColor: index % 2 === 0 ? '#ECECEC' : '#FFFFFF',
-            }"
+            :class="['student-row', { 'odd-row': index % 2 !== 0 }]"
           >
             <li>{{ student.academicRegistration }}</li>
             <li>{{ student.name }}</li>
             <li>{{ student.cpf }}</li>
             <li>
-              <button @click="goToEditStudent(student.academicRegistration)" style="margin-right: 10px; cursor: pointer;">Editar</button>
-              <button @click="openModalDeleteStudent(student.academicRegistration, student.name)" style="cursor: pointer;">Excluir</button>
+              <button @click="goToEditStudent(student.academicRegistration)" class="edit-button">Editar</button>
+              <button @click="openModalDeleteStudent(student.academicRegistration, student.name)" class="delete-button">Excluir</button>
             </li>
           </ul>
         </div>
@@ -71,7 +58,7 @@ import DeleteConfirmModal from "@/components/DeleteConfirmModal.vue";
 import { deleteStudent, getStudents } from "@/services/StudentServices";
 import { StudentModel } from "@/model/StudentModel";
 import router from "@/router";
-import './styles/registrationListStyles.css';
+import "./styles/registrationListStyles.css"
 
 export default defineComponent({
   components: {

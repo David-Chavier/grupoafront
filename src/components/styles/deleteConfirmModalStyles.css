@@ -42,3 +42,8 @@
   font-size: 24px;
   cursor: pointer;
 }
+
+.cancel-button {
+  margin-right: 10px;
+  cursor: pointer;
+}
