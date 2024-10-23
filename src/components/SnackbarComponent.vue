@@ -13,7 +13,7 @@ import { defineComponent, reactive } from "vue";
 import "./styles/snackbarStyles.css";
 
 export default defineComponent({
-  name: "CustomSnackbar",
+  name: "SnackbarComponent",
   setup() {
     const snackbar = reactive({
       show: false,
